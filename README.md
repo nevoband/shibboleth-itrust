@@ -21,8 +21,8 @@ To register with I-Trust please go to https://accc.uic.edu/answer/how-do-i-insta
 Role Variables
 --------------
 
-You will need to provide the key and certs for this module which we generated in the previous steps
-Please read about ansible vault you should place the key in the vault and only link to it from your host vars
+You will need to provide the key and certs for this module which we generated in the previous steps.
+Please read about ansible vault you should place the key in the vault and only link to it from your host vars https://docs.ansible.com/ansible/latest/user_guide/vault.html
 
 I-Trust cert is available here https://discovery.itrust.illinois.edu/itrust-certs/itrust.pem 
 

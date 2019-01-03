@@ -1,0 +1,55 @@
+---
+# tasks file for shibboleth-itrust
+
+- name: add shibboleth repository
+  yum_repository:
+    name: Shibboleth
+    description: Shibboleth (Centos 7)
+    baseurl: http://download.opensuse.org/repositories/security://shibboleth/CentOS_7/
+    gpgkey: http://download.opensuse.org/repositories/security:/shibboleth/CentOS_7//repodata/repomd.xml.key
+    gpgcheck: yes
+
+- name: install shibboleth
+  package: 
+    name: "{{ item }}" 
+    state: "{{ shibbolethsp_state }}"
+  with_items: "{{ shibbolethsp_packages }}"
+  notify: start shibboleth daemon
+
+- name: copy certificate and key to shibboleth folder
+  copy:
+    content: "{{ item.content }}"
+    dest: "{{ shibbolethsp_config_path }}/{{ item.filename }}"
+    owner: shibd
+    group: shibd
+    mode: "{{ item.mode }}"
+  with_items:
+    - { content: "{{ shibbolethsp_key }}", filename: "sp-key.pem", mode: "0600" }
+    - { content: "{{ shibbolethsp_cert}}", filename: "sp-cert.pem", mode: "0644" }
+    - { content: "{{ shibbolethsp_itrust_cert }}", filename: "itrust.pem", mode: "0644" }
+  loop_control:
+    label: "{{ shibbolethsp_config_path }}/{{ item.filename }}"
+  notify: start shibboleth daemon
+
+- name: copy shibboleth2.xml configuration file from template
+  template:
+    src: shibboleth2.xml.j2
+    dest: "{{ shibbolethsp_config_path }}/shibboleth2.xml"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: start shibboleth daemon
+
+- name: copy itrust metadata itrust.pem to shibboleth folder
+  get_url:
+    url: "https://discovery.itrust.illinois.edu/itrust-certs/itrust.pem"
+    dest: "{{ shibbolethsp_config_path }}"
+    mode: "0644"
+  notify: start shibboleth daemon
+
+- name: copy attribute-map.xml to shibboleth folder
+  get_url:
+      url: "https://accc.webhost.uic.edu/shibboleth/attribute-map.xml"
+      dest: "{{ shibbolethsp_config_path }}"
+      mode: "0644"
+  notify: start shibboleth daemon

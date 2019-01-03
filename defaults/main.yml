@@ -1,0 +1,7 @@
+---
+# defaults file for shibboleth-itrust
+shibbolethsp_state: latest
+shibbolethsp_entity_id: "https://dev.pharmacy.uic.edu/shibboleth"
+shibbolethsp_key: ""
+shibbolethsp_cert: ""
+shibbolethsp_itrust_cert: ""

@@ -1,0 +1,11 @@
+---
+# vars file for shibboleth-itrust
+
+shibbolethsp_packages:
+  - httpd
+  - shibboleth
+  - python-lxml
+
+shibbolethsp_service_name: shibd
+
+shibbolethsp_config_path: /etc/shibboleth

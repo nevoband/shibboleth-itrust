@@ -1,18 +1,57 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+This role will install shibboleth on CentOS 7 and allow you to add Shibboleth key/cert keys and configurations
+This is based on the tutorial https://accc.uic.edu/answer/how-do-i-install-and-configure-shibboleth
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+You will need to generate the private key and cert for shibboleth
+
+````bash
+sudo ./keygen.sh -h foo.example.uic.edu -e https://foo.example.uic.edu/shibboleth -f -y 10
+````
+
+You will also need to use th private key and certificate generated in the previous step to register your SP (Service Provider) on I-Trust (Identity Provider) 
+
+To register with I-Trust please go to https://accc.uic.edu/answer/how-do-i-install-and-configure-shibboleth and follow the section **Register your service provider with I-Trust federation**
+
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+You will need to provide the key and certs for this module which we generated in the previous steps
+Please read about ansible vault you should place the key in the vault and only link to it from your host vars
 
+I-Trust cert is available here https://discovery.itrust.illinois.edu/itrust-certs/itrust.pem 
+
+**Example:**
+vars.yml
+````yml
+shibbolethsp_key: "{{ vault_shibbolethsp_key }}"
+shibbolethsp_cert: "{{ vault_shibbolethsp_cert }}"
+shibbolethsp_itrust_cert: "{{ vault_shibboleth_itrust_cert }}"
+shibbolethsp_entity_id: "https://dev.pharmacy.uic.edu/shibboleth"
+````
+vault.yml
+````yml
+vault_shibbolethsp_key: |
+  -----BEGIN PRIVATE KEY-----
+  Your Private key goes here (KEEP this encrypted, NEVER SHARE IT!)
+  -----BEGIN PRIVATE KEY-----
+  
+vault_shibbolethsp_cert: |
+  -----BEGIN CERTIFICATE-----
+  your certificate goes here
+  -----END CERTIFICATE-----
+  
+vault_shibboleth_itrust_cert: |
+  -----BEGIN CERTIFICATE-----
+  your I-Trust certificate goes here
+  -----END CERTIFICATE-----
+
+````
 Dependencies
 ------------
 

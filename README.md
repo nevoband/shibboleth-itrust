@@ -1,7 +1,7 @@
 Role Name
 =========
 
-This role will install shibboleth on CentOS 7 and allow you to add Shibboleth key/cert keys and configurations
+This role will install shibboleth on CentOS 7 and allow you to add Shibboleth key/certs and configurations
 This is based on the tutorial https://accc.uic.edu/answer/how-do-i-install-and-configure-shibboleth
 
 Requirements
@@ -32,7 +32,7 @@ vars.yml
 shibbolethsp_key: "{{ vault_shibbolethsp_key }}"
 shibbolethsp_cert: "{{ vault_shibbolethsp_cert }}"
 shibbolethsp_itrust_cert: "{{ vault_shibboleth_itrust_cert }}"
-shibbolethsp_entity_id: "https://dev.pharmacy.uic.edu/shibboleth"
+shibbolethsp_entity_id: "https://foo.example.uic.edu/shibboleth"
 ````
 vault.yml
 ````yml
@@ -64,14 +64,9 @@ Including an example of how to use your role (for instance, with variables passe
 
     - hosts: servers
       roles:
-         - { role: username.rolename, x: 42 }
+         - { role: shibboleth-itrust }
 
 License
 -------
 
 BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
